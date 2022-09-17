@@ -23,5 +23,40 @@ Quyida berilgan ma'lum bir APIning sodda arxitekturasida - Brokerlar biznes g'oy
     </p>
 <br />
 
+## 1.2 Xususiyatlari
+Brokerlarning ijrosini boshqaruvchi ba'zi quyidagi qoidalar mavjud: 
 
+### 1.2.0 Mahaliy Interfeysni Qondirishi
+Brokerlar mahaliy kontrakt (interfeys)ni qondirishi kerak. Bu ularning implementatsiyasi va ularni ishlatadigan servislarni bog'lanib qolinishi oldini olish uchun kerak. 
+
+Misol uchun, bizda `Student` mahalliy modeli uchun ixtiyoriy CRUD* operatsiyalaridan birini implementatsiyasini talab qiluvchi `IStorageBroker` degan kontrakt (interfeys) bo'lsin. Kontrakt quyidagi ko'rinishda bo'lishi mumkin: 
+
+```csharp
+    public partial interface IStorageBroker
+    {
+        IQueryable<Student> SelectAllStudents();
+    }
+```
+
+_CRUD (Create, Read, Update, Delete) - ma'lumotlar ba'zasida jadvallar bilan bajariladigan operatsiyalar. Ya'ni, Qo'shish, O'qish, Yangilash va O'chirish operatsiyalarining qisqartmasidir._
+
+
+Ma'lumotlar bazasi brokerining implementatsiyasi quyidagicha bo'lishi mumkin:
+
+
+```csharp
+    public partial class StorageBroker
+    {
+        public DbSet<Student> Students { get; set; }
+
+        public IQueryable<Student> SelectAllStudents()
+        {
+            var broker = new StorageBroker(this.configuration);
+
+            return broker.Students;
+        }
+    }
+```
+
+Mahalliy kontrakt implementatsiyasi Misolda ko'rsatilgani kabi Entity Freymwork ishlatishdan, `Dapper`ga o'xshagan butunlay boshqa texnologiyaga yoki `Oracle` var `PostgreSQL` kabi butunlay boshqa infrastrasturkturaga ixtiyoriy paytda almashtirilishi mumkin.
 
