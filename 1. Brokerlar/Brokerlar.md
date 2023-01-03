@@ -60,8 +60,8 @@ Ma'lumotlar bazasi brokerining implementatsiyasi quyidagicha bo'lishi mumkin:
 
 Mahalliy kontrakt implementatsiyasi Misolda ko'rsatilgani kabi Entity Freymwork ishlatishdan, `Dapper`ga o'xshagan butunlay boshqa texnologiyaga yoki `Oracle` var `PostgreSQL` kabi butunlay boshqa infrastrasturkturaga ixtiyoriy paytda almashtirilishi mumkin.
 
-### 1.2.1 Oqim Nazorati Yo'q
-Brokerlar oqimni boshqarishning (if-shart opearatori, while-sikl yoki switch case -tanlash operatori kabi) hech qanday shakliga ega bermasligi kerak ,chunki oqimni boshqarish biznes mantiq hisoblanadi, va u brokerlar qatlamiga emas balki xizmatlar qatlamiga yaxshiroq mos keladi.
+### 1.2.1 Mantiq Nazorati Mumkin Emas
+Brokerlar mantiq nazorati (if-shart opearatori, while-sikl yoki switch case -tanlash operatori kabi) hech qanday shakliga ega bo'lmasligi kerak ,chunki mantiqni nazorat qilish biznes g'oya hisoblanadi, va u brokerlar qatlamiga emas balki xizmatlar qatlamiga yaxshiroq mos keladi.
 
 Misol uchun, ma'lumotlar bazasidan talabalar ro'yhatini oladigan broker metodi quyidagicha ko'rinishga ega:
 
@@ -72,4 +72,4 @@ EntityFramework-ning `DbSet<T>`-ni chaqiradigan va `Student` kabi modelni qaytar
 
 ### 1.2.2 Xatoliklarga Ishlov Berish Yo'q
 
-Xatoliklarga ishlov berish ham oqimni boshqarishning bir shakli. Brokerlar-hech qanday xatoliklarga ishlov bermasligi kerak, aksincha ularning brokerlarga qo'shni bo'lgan xizmatlar qatlamiga o'tishiga imkon berishi kerak, chunki xatoliklarni xizmatlar qatlamida to'g'ri xaritalash va mahalliylashtirish mumkin.  
+Xatoliklarga ishlov berish ham mantiq nazoratining bir shakli. Brokerlar-hech qanday xatoliklarga ishlov bermasligi kerak, aksincha ularning brokerlarga qo'shni bo'lgan xizmatlar qatlamiga o'tishiga imkon berishi kerak, chunki xatoliklarni xizmatlar qatlamida to'g'ri moslashtirish va mahalliylashtirish mumkin.  
