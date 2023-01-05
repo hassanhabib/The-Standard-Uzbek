@@ -61,7 +61,7 @@ Ma'lumotlar bazasi brokerining implementatsiyasi quyidagicha bo'lishi mumkin:
 Mahalliy kontrakt implementatsiyasi Misolda ko'rsatilgani kabi Entity Freymwork ishlatishdan, `Dapper`ga o'xshagan butunlay boshqa texnologiyaga yoki `Oracle` var `PostgreSQL` kabi butunlay boshqa infrastrasturkturaga ixtiyoriy paytda almashtirilishi mumkin.
 
 ### 1.2.1 Mantiq Nazorati Mumkin Emas
-Brokerlar mantiq nazorati (if-shart opearatori, while-sikl yoki switch case -tanlash operatori kabi) hech qanday shakliga ega bo'lmasligi kerak ,chunki mantiqni nazorat qilish biznes g'oya hisoblanadi, va u brokerlar qatlamiga emas balki xizmatlar qatlamiga yaxshiroq mos keladi.
+Brokerlar mantiq nazoratining (if-shart opearatori, while-sikl yoki switch case -tanlash operatori kabi) hech qanday shakliga ega bo'lmasligi kerak ,chunki mantiqni nazorat qilish biznes g'oya hisoblanadi, va u brokerlar qatlamiga emas balki xizmatlar qatlamiga yaxshiroq mos keladi.
 
 Misol uchun, ma'lumotlar bazasidan talabalar ro'yhatini oladigan broker metodi quyidagicha ko'rinishga ega:
 
@@ -70,6 +70,48 @@ Misol uchun, ma'lumotlar bazasidan talabalar ro'yhatini oladigan broker metodi q
 ```
 EntityFramework-ning `DbSet<T>`-ni chaqiradigan va `Student` kabi modelni qaytaradigan sodda metod. 
 
-### 1.2.2 Xatoliklarga Ishlov Berish Yo'q
 
+### 1.2.2 Xatoliklarga Ishlov Berish Yo'q
 Xatoliklarga ishlov berish ham mantiq nazoratining bir shakli. Brokerlar-hech qanday xatoliklarga ishlov bermasligi kerak, aksincha ularning brokerlarga qo'shni bo'lgan xizmatlar qatlamiga o'tishiga imkon berishi kerak, chunki xatoliklarni xizmatlar qatlamida to'g'ri moslashtirish va mahalliylashtirish mumkin.  
+
+
+### 1.2.3 Konfiguratsiyalariga egalik qilish
+Brokerlardan oʻz konfiguratsiyalarini boshqarish ham talab qilinadi. Ular qaysi tashqi texnologiyani birlashtirgan bo'lishidan qat'iy nazar, konfiguratsiya ob'ektidan konfiguratsiyalarni olish va sozlash uchun qaramlik in'ektsiyasiga ega bo'lishi mumkin.
+
+Misol uchun, ma'lumotlar ombori bilan aloqani muvaffaqiyatli amalga oshirish uchun, ulanishning (string turida) olinishi va ma'lumotlar ombori mijoziga o'tkazilishi talab qilinadi, quyidagicha:
+
+```csharp
+    public partial class StorageBroker : EFxceptionsContext, IStorageBroker
+    {
+        private readonly IConfiguration configuration;
+
+        public StorageBroker(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            this.Database.Migrate();
+        }
+
+        ...
+        ...
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            string connectionString = this.configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
+```
+
+### 1.2.4 MahalliyTurlar
+Brokerlar  xizmatlar(brokerlarga qo'shni)qatlami tomonidan o'tgan primitive turlar(int,string,char) asosida tashqi model ob'ektini qurishlari mumkin.
+
+Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  subject, content yoki address kabi asosiy kiritish parametrlarini talab qilishi quyidagicha bo'ladi.
+
+```csharp
+    public async ValueTask SendMailAsync(List<string> recipients, string subject, string content)
+    {
+        Message message = BuildMessage(recipients, ccRecipients, subject, content);
+        await SendEmailMessageAsync(message);
+    }
+```
