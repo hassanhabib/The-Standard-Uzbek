@@ -75,8 +75,8 @@ EntityFramework-ning `DbSet<T>`-ni chaqiradigan va `Student` kabi modelni qaytar
 Xatoliklarga ishlov berish ham mantiq nazoratining bir shakli. Brokerlar-hech qanday xatoliklarga ishlov bermasligi kerak, aksincha ularning brokerlarga qo'shni bo'lgan xizmatlar qatlamiga o'tishiga imkon berishi kerak, chunki xatoliklarni xizmatlar qatlamida to'g'ri moslashtirish va mahalliylashtirish mumkin.  
 
 
-### 1.2.3 Konfiguratsiyalariga egalik qilish
-Brokerlardan oʻz konfiguratsiyalarini boshqarish ham talab qilinadi. Ular qaysi tashqi texnologiyani birlashtirgan bo'lishidan qat'iy nazar, konfiguratsiya ob'ektidan konfiguratsiyalarni olish va sozlash uchun qaramlik in'ektsiyasiga ega bo'lishi mumkin.
+### 1.2.3 Sozlamalarga egalik qilish
+Brokerlardan oʻz sozlamalarini boshqarish ham talab qilinadi. Ular qaysi tashqi texnologiyani birlashtirgan bo'lishidan qat'iy nazar, sozlama obyektidan sozlamalarni olish va sozlash uchun qaramlilik in'ektsiyasiga ega bo'lishi mumkin.
 
 Misol uchun, ma'lumotlar ombori bilan aloqani muvaffaqiyatli amalga oshirish uchun, ulanishning (string turida) olinishi va ma'lumotlar ombori mijoziga o'tkazilishi talab qilinadi, quyidagicha:
 
@@ -103,10 +103,10 @@ Misol uchun, ma'lumotlar ombori bilan aloqani muvaffaqiyatli amalga oshirish uch
     }
 ```
 
-### 1.2.4 MahalliyTurlar
-Brokerlar  xizmatlar(brokerlarga qo'shni)qatlami tomonidan o'tgan primitive turlar(int,string,char) asosida tashqi model ob'ektini qurishlari mumkin.
+### 1.2.4 Mahalliy Turlar
+Brokerlar  xizmatlar(brokerlarga qo'shni)qatlami tomonidan o'tgan sodda turlar(int,string,char) asosida tashqi model obyektini qurishlari mumkin.
 
-Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  subject, content yoki address kabi asosiy kiritish parametrlarini talab qilishi quyidagicha bo'ladi.
+Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  mavzu, content yoki manzil kabi asosiy kiritish parametrlarini talab qilishi quyidagicha bo'ladi.
 
 ```csharp
     public async ValueTask SendMailAsync(List<string> recipients, string subject, string content)
