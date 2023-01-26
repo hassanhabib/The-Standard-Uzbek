@@ -115,3 +115,5 @@ Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  m
         await SendEmailMessageAsync(message);
     }
 ```
+
+Sodda turdagi(int,string,char)kirish parametrlari xizmatlar(brokerga qo'shni qatlam) va tashqi modellar orasidagi kuchli bog'liqlikni kamaytiradi.
