@@ -117,3 +117,4 @@ Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  m
 ```
 
 Sodda turdagi(int,string,char)kirish parametrlari xizmatlar(brokerga qo'shni qatlam) va tashqi modellar orasidagi kuchli bog'liqlikni kamaytiradi.
+Hattoki, broker sizning dasturingiz va tashqi RESTful API ni bog'lash nuqtasi bo'lib xizmat qilsada, mahalliy modellarni API ga jo'natiladigan yoki qabul qilinadigan modellar bilan bir xil qilish maslahat beriladi. Bu jarayonda NuGet kutubxonalari, dastur ichida yaratilgan kutubxonalar yoki umumiy loyiha turlaridan foydalanish tavsiya etilmaydi.
