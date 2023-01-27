@@ -104,7 +104,7 @@ Misol uchun, ma'lumotlar ombori bilan aloqani muvaffaqiyatli amalga oshirish uch
 ```
 
 ### 1.2.4 Mahalliy Turlar
-Brokerlar  xizmatlar(brokerlarga qo'shni)qatlami tomonidan o'tgan sodda turlar(int,string,char) asosida tashqi model obyektini qurishlari mumkin.
+Brokerlar  xizmatlar (brokerlarga qo'shni) qatlami tomonidan o'tgan sodda turlar (int,string,char) asosida tashqi model obyektini qurishlari mumkin.
 
 Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  mavzu, content yoki manzil kabi asosiy kiritish parametrlarini talab qilishi quyidagicha bo'ladi.
 
@@ -116,5 +116,14 @@ Misol uchun, elektron pochta xabarnomasi brokeridagi  `.Send(...)` funksiyasi  m
     }
 ```
 
-Sodda turdagi(int,string,char)kirish parametrlari xizmatlar(brokerga qo'shni qatlam) va tashqi modellar orasidagi kuchli bog'liqlikni kamaytiradi.
+Sodda turdagi (int,string,char) kirish parametrlari xizmatlar(brokerga qo'shni qatlam) va tashqi modellar orasidagi kuchli bog'liqlikni kamaytiradi.
 Hattoki, broker sizning dasturingiz va tashqi RESTful API ni bog'lash nuqtasi bo'lib xizmat qilsada, mahalliy modellarni API ga jo'natiladigan yoki qabul qilinadigan modellar bilan bir xil qilish maslahat beriladi. Bu jarayonda NuGet kutubxonalari, dastur ichida yaratilgan kutubxonalar yoki umumiy loyiha turlaridan foydalanish tavsiya etilmaydi.
+
+### 1.2.5 Nomlashdagi Qoidalar
+Brokerlar uchun tuzilgan shartnomalar, uning barcha vazifalarini ko'rsatishi uchun imkon qadar generic (umumiy) bo'lishi kerak; masalan, ma'lum bir texnologiya yoki infratuzilmani ko'rsatish uchun `ISqlStorageBroker` ning o'rniga `IStorageBroker` dan fordalanamiz .
+
+Yagona ombor brokeri orqali shartnoma nomi bilan bir xil nomni saqlab qolish qulayroq.Ammo brokerlarni implementatsiya (dasturga kiritganimizda) qilganimizda, bularning barchasi shunga o'xshash vazifalarni bajaradigan brokerlarning miqdoriga bo'g'liq bo'ladi.Bizning holatda, bizda "IStorageBroker" interfeysi mavjud, shuning uchun uning nomi "StorageBroker" bo'ladi.
+
+Agarda, ilovangiz bir nechta queues(navbat), storage(ombor) yoki elektron pochta xizmati provayderlarini qo'llab-quvvatlasa, siz brokerning umumiy maqsadini belgilashni boshlashingiz kerak; masalan, `IQueueBroker`ning `OrdersQueueBroker` va `NotificationQueueBroker` kabi implementatsiya (sozlama) lari bo'ladi.
+
+Agar implementatsiya (sozlama) bir xil model va biznes g'oyasiga qaratilgan bo'lsa, texnologiyaga o'tish ko'proq mos kelishi mumkin.Masalan, `IStorageBroker`, ikki xil aniq `SqlStorageBroker` va `MongoStorageBroker` kabi  dasturlar bilan  shartnoma tuzishi mumkin. Bu esa ishlab chiqarish infratuzilmasi xarajatlarini kamaytirish niyatida bo'lgan holatlarga uchun  xosdir.
