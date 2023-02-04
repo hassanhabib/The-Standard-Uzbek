@@ -127,3 +127,16 @@ Yagona ombor brokeri orqali shartnoma nomi bilan bir xil nomni saqlab qolish qul
 Agarda, ilovangiz bir nechta queues(navbat), storage(ombor) yoki elektron pochta xizmati provayderlarini qo'llab-quvvatlasa, siz brokerning umumiy maqsadini belgilashni boshlashingiz kerak; masalan, `IQueueBroker`ning `OrdersQueueBroker` va `NotificationQueueBroker` kabi implementatsiya (sozlama) lari bo'ladi.
 
 Agar implementatsiya (sozlama) bir xil model va biznes g'oyasiga qaratilgan bo'lsa, texnologiyaga o'tish ko'proq mos kelishi mumkin.Masalan, `IStorageBroker`, ikki xil aniq `SqlStorageBroker` va `MongoStorageBroker` kabi  dasturlar bilan  shartnoma tuzishi mumkin. Bu esa ishlab chiqarish infratuzilmasi xarajatlarini kamaytirish niyatida bo'lgan holatlarga uchun  xosdir.
+
+### 1.2.6 Til
+Brokerlar o'zlari qo'llab-quvvatlaydigan tashqi texnologiyalar tilida gaplashadilar.
+Masalan, SQL dagi(ma'lumotlar ombori) `Select` so'roviga mos kelish uchun  ombor brokerida biz `SelectById` dan foydalanamiz, queue (navbat) brokerida esa tilga mos kelish uchun `Enqueue` dan.
+
+Agar broker API so'nggi nuqtasida foydalanilsa, u `POST`, `GET` yoki `PUT` kabi RESTFul semantikasiga amal qilishi kerak. Quyidagi misoldagidek:
+
+```csharp
+
+    public async ValueTask<Student> PostStudentAsync(Student student) =>
+        await this.PostAsync(RelativeUrl, student);
+
+```
