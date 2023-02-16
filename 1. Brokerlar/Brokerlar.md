@@ -140,3 +140,51 @@ Agar broker API so'nggi nuqtasida foydalanilsa, u `POST`, `GET` yoki `PUT` kabi 
         await this.PostAsync(RelativeUrl, student);
 
 ```
+### 1.2.7 Atrofdagilar
+Brokerlar boshqa brokerlarni chaqira olmaydi; brokerlar mavhumlikning birinchi nuqtasi bo'lgani uchun ular sozlamalarga kirish modelidan boshqa hech qanday qo'shimcha mavhumlik yoki bog'liqlikni talab qilmaydi.
+
+Brokerlar xizmatlar qatlamiga ham bog'liq bo'lishi mumkin emas, chunki har qanday tizimdagi mantiq xizmatlar qatlamidan brokerlarga keladi, aksincha bo'lishi mumkin emas.
+
+Misol uchun, mikroservis queue(navbat)ga a'zo bo'lishi kerak bo'lsa ham, brokerlar kiruvchi hodisalarni qayta ishlash uchun Listener(tinglovchi) usulini oldinga o'tkazadilar, lekin ishlov berish mantiqini ta'minlaydigan xizmatlarni chaqirmaydilar.
+
+Bu erda umumiy qoida shundan iboratki, faqat xizmatlar qatlami brokerlarni chaqirishi mumkin; brokerlar faqat tashqi mahalliy bog'liqliklarni chaqirishlari mumkin.
+
+## 1.3 Qismlar
+
+Ombor brokerlari kabi bir nechta sub'ektlarni qo'llab-quvvatlovchi brokerlar har bir entity(model) uchun mas'uliyatni taqsimlash uchun qismlarga bo'linishi kerak.
+
+Misol uchun, agar bizda "Student" va "Teacher" entity(modellar)i uchun barcha CRUD(Create,Read,Update,Delete) amallarini ta'minlaydigan ombor brokerimiz bo'lsa, u holda fayllarni tashkil qilish quyidagicha bo'lishi kerak:
+
+- IStorageBroker.cs
+  - IStorageBroker.Students.cs
+  - IStorageBroker.Teachers.cs
+- StorageBroker.cs
+  - StorageBroker.Students.cs
+  - StorageBroker.Teachers.cs
+
+
+Sinfni qismlarga ajratish - maxsus broker har bir obyektga  alohida e'tibor qaratadi, bu esa dasturiy ta'minotning barqarorligini ancha yuqori qiladi.
+
+Ammo broker fayllari va papkalarni nomlash qoidalari qat'iy ravishda ular qo'llab-quvvatlaydigan ob'ektlarning ko'pligiga va qo'llab-quvvatlanadigan umumiy resursning o'ziga xosligiga qaratilgan.
+
+Masalan, biz `IStorageBroker.Students.cs` deymiz. Shuningdek, biz `IEmailBroker` yoki `IQueueBroker.Notifications.cs` ham deb atashimiz mumkin.
+
+Xuddi shu qoidalar ushbu brokerlarni o'z ichiga olgan folders(papkalar) yoki namespaceslarga nisbatan qo'llaniladi.
+
+Masalan, quyidagicha:
+
+```csharp
+namespace OtripleS.Web.Api.Brokers.Storages
+{
+    ...
+}
+```
+
+Va bunday:
+
+```csharp
+namespace OtripleS.Web.Api.Brokers.Queues
+{
+    ...
+}
+```
