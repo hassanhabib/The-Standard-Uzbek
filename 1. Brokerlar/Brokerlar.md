@@ -188,3 +188,154 @@ namespace OtripleS.Web.Api.Brokers.Queues
     ...
 }
 ```
+
+### 1.4.0 Entity Brokerlar
+Entity brokerlari dasturning biznes talablarini bajarish uchun zarur bo'lgan tashqi resurslar bilan integratsiya(a'loqa) nuqtalarini ta'minlaydi.
+
+Misol uchun, entity brokerlar storage(ombor) bilan integratsiya(a'loqa) qilish orqali, ma'lumotlar ombori(database)dan ma'lumotlarni olish va u yerga saqlashni ta'minlaydi. 
+
+Shuningdek, Entity brokerlari queue(navbat) brokerlariga o'xshab, o'zlarining biznes mantig'ini bajarish uchun boshqa xizmatlar foydalanish va qayta ishlash uchun xabarlarni navbatga yuborish uchun integratsiya ham nuqtasini ta'minlaydi.
+
+Broker bilan qo'shni service(xizmat) qavati faqat entity brokerlarini chaqirishi  mumkin, chunki ular logikani davom etishdan oldin qabul qilgan yoki taqdim etgan ma'lumotlarni bir neshta tekshirishdan o'takzishni talab qiladi.
+
+### 1.4.1 Yordamchi Brokerlar
+Yordamchi brokerlar umumiy maqsadli brokerlar bo'lib, ular yordamchi xizmatlar uchun funksionallikni ta'minlaydi, ammo ularni boshqa tizimlardan ajratib turadigan hech qanday xususiyatga ega emas.
+
+`DateTimeBroker` yordamchi brokerlariga yaxshi misol boʻlishi mumkin – bu biznes qatlamining tizim sanasi vaqtiga kuchli bogʻliqligini yoʻqotish uchun maxsus yaratilgan broker.
+
+Vaqt brokerlari hech qanday modelni maqsad qilib qo'ymaydi va ular ko'plab tizimlarda deyarli bir xil.
+
+Yordamchi brokerlarining yana bir misoli `LoggingBroker`.Ular tizim muhandislariga tizim bo'ylab ma'lumotlarning umumiy oqimini tasavvur qilishlari va har qanday muammo yuzaga kelganda xabardor bo'lishlari uchun har qanday fayllarga ma'lumotlarni yozib boradi .
+
+Entity Brokerlardan farqli o'laroq, yordamchi brokerlar biznes qatlamining har qanday qavatida  chaqirilishi mumkin:  foundation(asos), processing(ishlov berish), orchestration(orkestratsiya), coordination(muvofiqlashtirish), management(boshqaruv) yoki aggregation(yig'ish) service(xizmat)larida. Buning sababi, logging brokerlari xizmatlar qatlamlariga xatolarni qayd qilish yoki sanani va boshqa qo'llab-quvvatlovchi funksiyalarni hisoblash uchun zarur bo'lgan barcha imkoniyatlarni taqdim etish uchun tizimda yordamchi komponent sifatida talab qilinadi.
+
+Brokerlarning haqiqiy misollarini [OtripleS](https://github.com/hassanhabib/OtripleS/tree/master/OtripleS.Web.Api/Brokers) loyihasida ko'rishingiz mumkin.
+
+## 1.5 Ishlatilishi
+
+Bu yerda `Student` ob’ektiga tegishli barcha CRUD(Create,Read,Update,Delete) amallari uchun ombor brokerining real hayotda tatbiq etilishi:
+
+###### IStorageBroker.cs:
+```csharp
+namespace OtripleS.Web.Api.Brokers.Storage
+{
+    public partial interface IStorageBroker
+    {
+    }
+}
+
+```
+
+###### StorageBroker.cs:
+```csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using EFxceptions.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using OtripleS.Web.Api.Models.Users;
+
+namespace OtripleS.Web.Api.Brokers.Storages
+{
+    public partial class StorageBroker : EFxceptionsIdentityContext<User, Role, Guid>, IStorageBroker
+    {
+        private readonly IConfiguration configuration;
+
+        public StorageBroker(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            this.Database.Migrate();
+        }
+
+        private async ValueTask<T> InsertAsync<T>(T @object)
+        {
+            this.Entry(@object).State = EntityState.Added;
+            await this.SaveChangesAsync();
+
+            return @object;
+        }
+
+        private IQueryable<T> SelectAll<T>() where T : class => this.Set<T>();
+
+        private async ValueTask<T> SelectAsync<T>(params object[] @objectIds) where T : class =>
+            await this.FindAsync<T>(objectIds);
+
+        private async ValueTask<T> UpdateAsync<T>(T @object)
+        {
+            this.Entry(@object).State = EntityState.Modified;
+            await this.SaveChangesAsync();
+
+            return @object;
+        }
+
+        private async ValueTask<T> DeleteAsync<T>(T @object)
+        {
+            this.Entry(@object).State = EntityState.Deleted;
+            await this.SaveChangesAsync();
+     
+            return @object;
+        }
+
+        ...
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            string connectionString = this.configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
+}
+```
+
+###### IStorageBroker.Students.cs:
+```csharp
+using system;
+using system.Linq;
+using system.Threading.Tasks;
+using OtripleS.Web.Api.Models.Students;
+
+namespace OtripleS.Web.Api.Brokers.Storage
+{
+    public partial interface IStorageBroker
+    {
+        public ValueTask<Student> InsertStudentAsync(Student student);
+        public IQueryable<Student> SelectAllStudents();
+        public ValueTask<Student> SelectStudentByIdAsync(Guid studentId);
+        public ValueTask<Student> UpdateStudentAsync(Student student);
+        public ValueTask<Student> DeleteStudentAsync(Student student);
+    }
+}
+``` 
+
+###### StorageBroker.Students.cs:
+```csharp
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using OtripleS.Web.Api.Models.Students;
+
+namespace OtripleS.Web.Api.Brokers.Storages
+{
+    public partial class StorageBroker
+    {
+        public DbSet<Student> Students { get; set; }
+
+        public async ValueTask<Student> InsertStudentAsync(Student student) =>
+            await InsertAsync(student);
+
+        public IQueryable<Student> SelectAllStudents() => SelectAll<Student>();
+
+        public async ValueTask<Student> SelectStudentByIdAsync(Guid studentId) =>
+            await SelectAsync<Student>(studentId);
+
+        public async ValueTask<Student> UpdateStudentAsync(Student student) =>
+            await UpdateAsync(student);
+
+        public async ValueTask<Student> DeleteStudentAsync(Student student) =>
+            await DeleteAsync(student);
+    }
+}
+```
