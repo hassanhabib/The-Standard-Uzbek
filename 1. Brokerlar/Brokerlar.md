@@ -339,3 +339,24 @@ namespace OtripleS.Web.Api.Brokers.Storages
     }
 }
 ```
+
+## 1.6 Xulosa
+Brokerlar sizning biznes g'oyangiz va tashqi dunyo o'rtasidagi mavhumlikning dastlabki qatlamidir. Lekin ular mavhumlikning yagona qatlami emas; chunki sizning brokerlaringiz orqali ularga qo'shni service(xizmatlar)ingizga o'ta oladigan bir nechta mahalliy modellar bo'ladi. Biznes g'oya  doirasidan tashqarida har qanday mapping(ko'chirib o'tkazish)dan qochish tabiiydir; bizning holatda esa bu foundation service(xizmatlar)idir. 
+
+Masalan, saqlash brokerida (ORM dan qat'iy nazar, masalan, EntityFramework) ba'zi mahalliy xatoliklar paydo bo'ladi, masalan, "DbUpdateException" yoki "SqlException". Bunday holda, ushbu xatoliklar va ularni mahalliy xatolik modellariga aylantirish uchun bizning asosiy mantiqimiz o'rtasida xaritachi rolini o'ynash uchun bizga yana bir abstraksiya qatlami kerak.
+
+Bu mas'uliyatga brokerga qo'shni service(xizmat)lar javobgar. Men ularni foundation(asos) service(xizmat)lari deb ham atayman, bu xizmatlar mahalliy modellar va shartnomalardan iborat bo'lgan asosiy mantiqingiz oldidagi so'nggi mavhumlik nuqtasidir.
+
+## 1.7 Tez-tez so'raladigan savollar
+Vaqt o'tishi bilan men faoliyatim davomida ishlagan muhandislardan ba'zi umumiy savollar paydo bo'ldi. Ushbu savollarning ba'zilari bir necha marta takrorlanganligi sababli, men brokerlarning boshqa istiqbollari haqida hamma bilishi uchun ularni shu yerda ttaqdim etishni foydali bo'ladi deb o'yladim.
+
+#### 1.7.0 Brokerlar Patterni Repository Patterni bilan bir xilmi?
+Bunday emas, hech bo'lmaganda jarayonlar nuqtai nazardan, brokerlar repositoridan ko'ra generic(umumiy)roq.
+
+Repositariylar odatda saqlashga o'xshash operatsiyalarni, asosan ma'lumotlar bazalariga qaratilgan. Ammo brokerlar elektron pochta xizmatlari, queue(navbatlar) va boshqa APIlar kabi har qanday tashqi qaramlik bilan integratsiya nuqtasi bo'lishi mumkin.
+
+Brokerlarga o'xshash dizayn pattern bu Unit of Work dizayn patterni.U, asosan, nomni biron bir jarayon bilan bog'lamasdan, umumiy jarayonga e'tibor qaratadi.
+
+Bu dizayn patterlarning barchasi, bir xil SOLID tamoyillarini amalga oshirishga harakat qiladi: tashvishlarni ajratish, qaramlikni in'ektsiya qilish va yagona javobgarlik.
+
+Ammo SOLID aniq ko'rsatmalar emas, balki printsiplar bo'lganligi sababli, ushbu printsipga erishish uchun barcha turli xil implementatsiyalar va patternlarni nazarda tutiladi.
