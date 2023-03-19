@@ -63,7 +63,7 @@ Mahalliy kontrakt implementatsiyasi Misolda ko'rsatilgani kabi Entity Freymwork 
 ### 1.2.1 Mantiq Nazorati Mumkin Emas
 Brokerlar mantiq nazoratining (if-shart opearatori, while-sikl yoki switch case -tanlash operatori kabi) hech qanday shakliga ega bo'lmasligi kerak ,chunki mantiqni nazorat qilish biznes g'oya hisoblanadi, va u brokerlar qatlamiga emas balki xizmatlar qatlamiga yaxshiroq mos keladi.
 
-Misol uchun, ma'lumotlar bazasidan talabalar ro'yhatini oladigan broker metodi quyidagicha ko'rinishga ega:
+Misol uchun, ma'lumotlar bazasidan talabalar ro'yxatini oladigan broker metodi quyidagicha ko'rinishga ega:
 
 ```csharp
         public IQueryable<Student> SelectAllStudents() => SelectAll<Student>();
@@ -120,9 +120,9 @@ Sodda turdagi (int,string,char) kirish parametrlari xizmatlar(brokerga qo'shni q
 Hattoki, broker sizning dasturingiz va tashqi RESTful API ni bog'lash nuqtasi bo'lib xizmat qilsada, mahalliy modellarni API ga jo'natiladigan yoki qabul qilinadigan modellar bilan bir xil qilish maslahat beriladi. Bu jarayonda NuGet kutubxonalari, dastur ichida yaratilgan kutubxonalar yoki umumiy loyiha turlaridan foydalanish tavsiya etilmaydi.
 
 ### 1.2.5 Nomlashdagi Qoidalar
-Brokerlar uchun tuzilgan shartnomalar, uning barcha vazifalarini ko'rsatishi uchun imkon qadar generic (umumiy) bo'lishi kerak; masalan, ma'lum bir texnologiya yoki infratuzilmani ko'rsatish uchun `ISqlStorageBroker` ning o'rniga `IStorageBroker` dan fordalanamiz .
+Brokerlar uchun tuzilgan shartnomalar, uning barcha vazifalarini ko'rsatishi uchun imkon qadar generic (umumiy) bo'lishi kerak; masalan, ma'lum bir texnologiya yoki infratuzilmani ko'rsatish uchun `ISqlStorageBroker` ning o'rniga `IStorageBroker` dan foydalanamiz .
 
-Yagona ombor brokeri orqali shartnoma nomi bilan bir xil nomni saqlab qolish qulayroq.Ammo brokerlarni implementatsiya (dasturga kiritganimizda) qilganimizda, bularning barchasi shunga o'xshash vazifalarni bajaradigan brokerlarning miqdoriga bo'g'liq bo'ladi.Bizning holatda, bizda "IStorageBroker" interfeysi mavjud, shuning uchun uning nomi "StorageBroker" bo'ladi.
+Yagona ombor brokeri orqali shartnoma nomi bilan bir xil nomni saqlab qolish qulayroq.Ammo brokerlarni implementatsiya (dasturga kiritganimizda) qilganimizda, bularning barchasi shunga o'xshash vazifalarni bajaradigan brokerlarning miqdoriga bog'liq bo'ladi.Bizning holatda, bizda "IStorageBroker" interfeysi mavjud, shuning uchun uning nomi "StorageBroker" bo'ladi.
 
 Agarda, ilovangiz bir nechta queues(navbat), storage(ombor) yoki elektron pochta xizmati provayderlarini qo'llab-quvvatlasa, siz brokerning umumiy maqsadini belgilashni boshlashingiz kerak; masalan, `IQueueBroker`ning `OrdersQueueBroker` va `NotificationQueueBroker` kabi implementatsiya (sozlama) lari bo'ladi.
 
@@ -196,7 +196,7 @@ Misol uchun, entity brokerlar storage(ombor) bilan integratsiya(a'loqa) qilish o
 
 Shuningdek, Entity brokerlari queue(navbat) brokerlariga o'xshab, o'zlarining biznes mantig'ini bajarish uchun boshqa xizmatlar foydalanish va qayta ishlash uchun xabarlarni navbatga yuborish uchun integratsiya ham nuqtasini ta'minlaydi.
 
-Broker bilan qo'shni service(xizmat) qavati faqat entity brokerlarini chaqirishi  mumkin, chunki ular logikani davom etishdan oldin qabul qilgan yoki taqdim etgan ma'lumotlarni bir neshta tekshirishdan o'takzishni talab qiladi.
+Broker bilan qo'shni service(xizmat) qavati faqat entity brokerlarini chaqirishi  mumkin, chunki ular logikani davom etishdan oldin qabul qilgan yoki taqdim etgan ma'lumotlarni bir neshta tekshirishdan o'tkazishni talab qiladi.
 
 ### 1.4.1 Yordamchi Brokerlar
 Yordamchi brokerlar umumiy maqsadli brokerlar bo'lib, ular yordamchi xizmatlar uchun funksionallikni ta'minlaydi, ammo ularni boshqa tizimlardan ajratib turadigan hech qanday xususiyatga ega emas.
@@ -348,7 +348,7 @@ Masalan, saqlash brokerida (ORM dan qat'iy nazar, masalan, EntityFramework) ba'z
 Bu mas'uliyatga brokerga qo'shni service(xizmat)lar javobgar. Men ularni foundation(asos) service(xizmat)lari deb ham atayman, bu xizmatlar mahalliy modellar va shartnomalardan iborat bo'lgan asosiy mantiqingiz oldidagi so'nggi mavhumlik nuqtasidir.
 
 ## 1.7 Tez-tez so'raladigan savollar
-Vaqt o'tishi bilan men faoliyatim davomida ishlagan muhandislardan ba'zi umumiy savollar paydo bo'ldi. Ushbu savollarning ba'zilari bir necha marta takrorlanganligi sababli, men brokerlarning boshqa istiqbollari haqida hamma bilishi uchun ularni shu yerda ttaqdim etishni foydali bo'ladi deb o'yladim.
+Vaqt o'tishi bilan men faoliyatim davomida ishlagan muhandislardan ba'zi umumiy savollar paydo bo'ldi. Ushbu savollarning ba'zilari bir necha marta takrorlanganligi sababli, men brokerlarning boshqa istiqbollari haqida hamma bilishi uchun ularni shu yerda taqdim etishni foydali bo'ladi deb o'yladim.
 
 #### 1.7.0 Brokerlar Patterni Repository Patterni bilan bir xilmi?
 Bunday emas, hech bo'lmaganda jarayonlar nuqtai nazardan, brokerlar repositoridan ko'ra generic(umumiy)roq.
@@ -359,4 +359,4 @@ Brokerlarga o'xshash dizayn pattern bu Unit of Work dizayn patterni.U, asosan, n
 
 Bu dizayn patterlarning barchasi, bir xil SOLID tamoyillarini amalga oshirishga harakat qiladi: tashvishlarni ajratish, qaramlikni in'ektsiya qilish va yagona javobgarlik.
 
-Ammo SOLID aniq ko'rsatmalar emas, balki printsiplar bo'lganligi sababli, ushbu printsipga erishish uchun barcha turli xil implementatsiyalar va patternlarni nazarda tutiladi.
+Ammo SOLID aniq ko'rsatmalar emas, balki prinsiplar bo'lganligi sababli, ushbu prinsipga erishish uchun barcha turli xil implementatsiyalar va patternlarni nazarda tutiladi.
